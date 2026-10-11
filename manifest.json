@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "IB Mental Math Trainer",
+  "short_name": "IB Math",
+  "description": "Sharper mental arithmetic for investment banking interviews. Train offline, learn shortcuts, and track your progress.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101114",
+  "theme_color": "#101114",
+  "orientation": "portrait-primary",
+  "categories": ["education", "productivity", "finance"],
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
