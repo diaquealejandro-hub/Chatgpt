@@ -32,7 +32,7 @@ await page.waitForTimeout(1200);assert.equal(await page.locator('.method-panel')
 await page.locator('[data-action="next"]').click();
 await page.locator('#answer').fill('999999999');await page.locator('#answer-form button[type="submit"]').click();
 assert.match(await page.locator('#feedback').innerText(),/Incorrect/);
-await page.locator('[data-action="method"]').click();await page.locator('[data-action="next"]').click();
+await page.locator('[data-action="method"]').click();await page.locator('[data-action="retry"]').click();
 await page.locator('[data-action="skip"]').click();assert.match(await page.locator('#feedback').innerText(),/Skipped/);
 await page.locator('[data-action="next"]').click();await page.locator('[data-action="pause"]').click();
 const paused=(await snapshot()).active.elapsed;await page.waitForTimeout(400);assert.equal((await snapshot()).active.elapsed,paused);
@@ -40,7 +40,7 @@ await page.locator('[data-action="save-home"]').click();await page.reload();awai
 assert.equal(await page.locator('#answer').isVisible(),true);
 await page.locator('[data-action="quit"]').click();await page.locator('[data-action="finish"]').last().click();
 assert.match(await page.locator('main').innerText(),/Another step forward/);
-assert.equal((await snapshot()).sessions.at(-1).total,3);assert.equal((await snapshot()).mistakes.length,2);
+assert.equal((await snapshot()).sessions.at(-1).total,3);assert.equal((await snapshot()).mistakes.length,1);
 console.log('PASS onboarding, answers, incorrect feedback, shortcuts, skip, pause/resume, persistence, summary');
 async function goNav(p){await page.locator(`.sidebar .nav-item[data-action="nav"][data-page="${p}"]`).click();}
 await goNav('train');await page.locator('[data-action="mode-setup"][data-mode="custom"]').click();
@@ -82,13 +82,13 @@ for(let i=0;i<5;i++){assert.equal((await snapshot()).active.question.b,5);await 
 assert.equal(await page.locator('.summary-top').count(),1);assert.equal((await snapshot()).sessions.at(-1).total,5);
 console.log('PASS playbook filters and complete five-question shortcut set');
 await goNav('sheets');
-for(const [tab,count]of [['squares',37],['cubes',15],['roots',38],['fractions',17]]){
+for(const [tab,count]of [['squares',100],['cubes',15],['roots',100],['roots-exact',100],['fractions',17]]){
  await page.locator(`[data-action="sheet-tab"][data-tab="${tab}"]`).click();assert.equal(await page.locator('.sheet-card').count(),count);
  await page.locator('[data-action="sheet-hide"]').click();assert.equal(await page.locator('.sheet-answer').first().innerText(),'?');
  await page.locator('.sheet-card').first().click();assert.notEqual(await page.locator('.sheet-answer').first().innerText(),'?');
  await page.locator('[data-action="sheet-hide"]').click();await page.locator('[data-action="sheet-flash"]').click();await page.locator('[data-action="flash-reveal"]').click();await page.locator('[data-action="flash-next"]').click();await page.locator('[data-action="flash-prev"]').click();await page.locator('[data-action="flash-shuffle"]').click();await page.locator('[data-action="sheet-flash"]').click();
 }
-await page.locator('[data-action="sheet-tab"][data-tab="roots"]').click();await page.locator('[data-action="sheet-reverse"]').click();
+await page.locator('[data-action="sheet-tab"][data-tab="roots-exact"]').click();await page.locator('[data-action="sheet-reverse"]').click();
 assert.equal((await snapshot()).active.question.subcategory,'reverse');await page.locator('[data-action="pause"]').click();await page.locator('[data-action="finish"]').click();
 console.log('PASS all cheat sheets, hide/reveal, flashcards and reverse quiz');
 await goNav('stats');assert.ok(await page.locator('.weakness-row').count());await page.screenshot({path:`${ARTIFACT_DIR}/ib-math-stats.png`,fullPage:true});

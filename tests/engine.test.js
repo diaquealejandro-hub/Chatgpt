@@ -116,7 +116,7 @@ test('local persistence, settings defaults and corrupt-storage recovery',()=>{
   const fresh=reset();assert.equal(fresh.answers.length,0);assert.equal(fresh.onboarded,false);
 });
 test('reference facts and presets are internally complete',()=>{
-  assert.equal(SQUARES.length,37);assert.ok(SQUARES.includes(30)&&SQUARES.includes(100));
+  assert.equal(SQUARES.length,100);assert.ok(SQUARES.includes(30)&&SQUARES.includes(100));
   for(let l=0;l<3;l++)for(const[c,types]of Object.entries(defaultSelection(l)))for(const t of types)assert.ok(CATEGORIES[c].types[t]);
   assert.equal(answerLabel({answer:1/3,format:'fraction',fraction:'1/3'}),'1/3');
 });
@@ -134,4 +134,13 @@ test('long sessions keep bounded detail without losing summary totals or categor
   const session={records:[]};
   for(let i=0;i<510;i++)appendSessionRecord(session,{category:'multiplication',subcategory:'2x2',correct:i!==500,seconds:2,date:Date.now()});
   assert.equal(session.records.length,500);assert.equal(sessionStats(session).total,510);assert.equal(sessionStats(session).correct,509);assert.equal(sessionStats(session).best,500);assert.equal(sessionStats(session).streak,9);assert.equal(session.categoryStats.multiplication.total,510);
+});
+
+test('proper-fraction drills always ask for a positive decimal below one',()=>{
+ for(let level=0;level<3;level++)for(let i=0;i<200;i++){
+  const p=generate('division','proper',level);assert.ok(p.a<p.b);assert.ok(p.answer>0&&p.answer<1);assert.equal(p.format,'decimal');assert.equal(validateAnswer(p,String(p.answer)).correct,true);
+ }
+});
+test('complete square table contains every base from one to one hundred exactly once',()=>{
+ assert.deepEqual(SQUARES,Array.from({length:100},(_,i)=>i+1));
 });

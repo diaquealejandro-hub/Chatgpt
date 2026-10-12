@@ -1,16 +1,16 @@
 export const LEVELS = ['Beginner', 'Interview', 'Advanced'];
 export const CATEGORIES = {
   multiplication: { name: 'Multiplication', icon: '×', description: 'Build speed. Spot the shortcut.', types: {'1x1':'1 digit × 1 digit','1x2':'1 digit × 2 digits','1x3':'1 digit × 3 digits','2x2':'2 digits × 2 digits','2x3':'2 digits × 3 digits','3x3':'3 digits × 3 digits'} },
-  division: { name: 'Division', icon: '÷', description: 'Fractions, decimals & exact division.', types: {fractions:'Fraction → decimal / %',reverse:'Decimal / % → fraction',exact:'Exact division',decimal:'Decimal division',large:'Larger numbers'} },
+  division: { name: 'Division', icon: '÷', description: 'Fractions, decimals & exact division.', types: {proper:'Fractions below 1',fractions:'Fraction → decimal / %',reverse:'Decimal / % → fraction',exact:'Exact division',decimal:'Decimal division',large:'Larger numbers'} },
   percentages: { name: 'Percentages', icon: '%', description: 'Growth, margins & reverse percentages.', types: {of:'Percentage of a number',increase:'Percentage increase',decrease:'Percentage decrease',change:'Percentage change',reverse:'Reverse percentages',margin:'EBITDA margins',equivalents:'Percentage ↔ fraction'} },
   addition: { name: 'Addition', icon: '+', description: 'Precision with carries & round numbers.', types: {'1x1':'1 + 1 digit','1x2':'1 + 2 digits','2x2':'2 + 2 digits','2x3':'2 + 3 digits','3x3':'3 + 3 digits','3x4':'3 + 4 digits','4x4':'4 + 4 digits'} },
   subtraction: { name: 'Subtraction', icon: '−', description: 'Borrowing & quick compensation.', types: {'1x1':'1 digit','2x2':'2 digits','3x3':'3 digits','4x4':'4 digits','2x3':'Mixed 2 / 3 digits','3x4':'Mixed 3 / 4 digits'} },
-  powers: { name: 'Powers', icon: 'x²', description: 'Squares, cubes & useful powers.', types: {squares:'Squares 1–30 + essentials',cubes:'Cubes 1–15',other:'Useful powers',reverse:'Reverse powers'} },
+  powers: { name: 'Powers', icon: 'x²', description: 'Squares, cubes & useful powers.', types: {squares:'Squares 1–100',cubes:'Cubes 1–15',other:'Useful powers',reverse:'Reverse powers'} },
   roots: { name: 'Square roots', icon: '√', description: 'Exact recognition & estimation.', types: {exact:'Exact roots',reverse:'Reverse recognition',approx:'Approximate roots'} },
   estimation: { name: 'Estimation', icon: '≈', description: 'Round smart. Calculate faster.', types: {multiply:'Estimate products',divide:'Estimate quotients',percent:'Estimate percentages'} },
   interview: { name: 'Interview math', icon: '↗', description: 'Multiples, EBITDA, growth & valuation.', types: {margin:'Revenue & EBITDA',multiple:'EV / EBITDA multiples',reverse:'Reverse multiples',growth:'Revenue growth',valuation:'Valuation',estimate:'Estimate valuation'} }
 };
-export const SQUARES = [...Array.from({length:30},(_,i)=>i+1),35,40,45,50,60,75,100];
+export const SQUARES = Array.from({length:100},(_,i)=>i+1);
 export const FRACTIONS = [[1,2],[1,3],[2,3],[1,4],[3,4],[1,5],[2,5],[3,5],[4,5],[1,6],[5,6],[1,8],[3,8],[5,8],[7,8],[1,10],[1,16]];
 const ri = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
 export const pick = list => list[ri(0,list.length-1)];
@@ -63,12 +63,12 @@ export function generate(category,subcategory,level=1,options={}) {
     return p(`${fmt(a)} − ${fmt(b)}`,a-b,{kind:'subtract',a,b});
   }
   if(category==='division' || (category==='percentages' && subcategory==='equivalents')) {
-    if(['fractions','reverse','equivalents'].includes(subcategory)) {
+    if(['proper','fractions','reverse','equivalents'].includes(subcategory)) {
       const fractionPool=options.family==='thirds'?FRACTIONS.filter(([,b])=>[3,6].includes(b)):options.family==='eighths'?FRACTIONS.filter(([,b])=>[8,16].includes(b)):FRACTIONS;
       const [a,b]=pick(fractionPool),value=a/b;
       const reverse=subcategory==='reverse'||(subcategory==='equivalents'&&Math.random()<.5);
       if(reverse) return p(`${fmt(value*100)}% = ? fraction`,value,{kind:'fraction',a,b,format:'fraction',fraction:`${a}/${b}`,unit:'fraction'});
-      const asPercent=subcategory==='equivalents'||Math.random()<.5;
+      const asPercent=subcategory!=='proper'&&(subcategory==='equivalents'||Math.random()<.5);
       return p(`${a}/${b} = ? ${asPercent?'percent':'decimal'}`,asPercent?value*100:value,{kind:'fraction',a,b,format:asPercent?'percent':'decimal',unit:asPercent?'%':'',fractionValue:value,equivalentFraction:true});
     }
     let b=Number(options.shortcut)||pick(subcategory==='large'?[24,27,32,48,75,125]:level===0?[2,4,5,8,10]:[5,8,12,15,16,18,20,24,25,32,35,50]);
@@ -105,9 +105,9 @@ export function generate(category,subcategory,level=1,options={}) {
     return p(`${a}${b===2?'²':b===3?'³':`^${b}`}`,a**b,{kind:'power',a,b});
   }
   if(category==='roots') {
-    let a=pick([...SQUARES,32]);
+    let a=pick(SQUARES);
     if(subcategory==='approx'){
-      const n=pick([50,170,200,500,80,120,300,650,1000]);
+      const n=options.rootTable?ri(1,100):pick([50,170,200,500,80,120,300,650,1000]);
       return p(`√${fmt(n)} ≈ ?`,Math.sqrt(n),{kind:'root',a:n,format:'estimate',tolerance:[.06,.03,.015][level],unit:'≈'});
     }
     return p(subcategory==='reverse'?`Which number squared equals ${fmt(a*a)}?`:`√${fmt(a*a)}`,a,{kind:'root',a:a*a});

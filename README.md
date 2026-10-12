@@ -15,14 +15,16 @@ This serves static files on port **8080** using Python 3. You can also run `pyth
 
 ## Practice
 
-- **Endless:** immediate questions; correct answers advance automatically. Incorrect answers wait for Continue. Enter checks the answer; Enter again during feedback moves on.
+- **Endless:** immediate questions; correct answers advance automatically. Answers are checked automatically after 850 ms without typing. Incorrect answers stay on the same question: edit the input or tap Retry until correct. Enter / Check answer remain optional manual controls. Enter during incorrect feedback retries; Enter during correct feedback moves on.
 - **Speed drill:** 1, 2, 5, or 10 minutes, with an animated countdown ring and session summary.
 - **Custom:** independently select every category and exercise subtype, including exact multiplication digit combinations.
 - **Adaptive:** starting presets move one level at a time after each block of ten answers in a category. Manual subtype selections are preserved; only applicable number distributions and tolerances change.
 - **Mistakes:** repeat saved misses and similar exercises, weighted by recurrence, speed, and whether an original miss has been solved.
 - **Daily workout:** ten minutes with the documented interview-focused mix. Proven weaknesses increase category and subtype weights.
 - **Mixed:** mix selected categories.
-- **Playbook / reference quiz:** five-question practice sets, including exact-factor shortcuts and fraction families.
+- **Playbook / reference quiz:** five completed-question practice sets, including exact-factor shortcuts and fraction families. Retries do not consume the set.
+- **Fractions below 1:** a dedicated Home / Training entry for proper fractions such as 1/4, 1/8, 1/16 and 5/8. All prompts ask for decimals below one.
+- **Reference tables:** all squares n² from 1 to 100, square roots of every integer 1–100, and inverse perfect-square roots from √1 to √10,000.
 
 Pause and finish controls are always available. Backgrounding the app automatically pauses the clock. A paused session is saved and can be resumed after reopening. One practice session is active at a time; starting another offers to finish the previous one first.
 
@@ -62,7 +64,7 @@ Run the dependency-free arithmetic and persistence tests:
 npm test
 ```
 
-The suite tests every subtype at all three levels (14,100 generated problems per run), independently verifies expected arithmetic, checks shortcut examples, rounding/equivalent formats, adaptive thresholds, mistake tracking, persistence, and lifetime totals after log rollover.
+The suite tests every subtype at all three levels (14,400 generated problems per run), independently verifies expected arithmetic, checks shortcut examples, rounding/equivalent formats, adaptive thresholds, mistake tracking, persistence, and lifetime totals after log rollover.
 
 A browser regression suite is in `tests/browser.mjs`. Playwright is **optional developer tooling**, not an application dependency. With Chromium installed, one way to run it without adding packages to the app is:
 
@@ -99,3 +101,5 @@ PLAYWRIGHT_MODULE=/tmp/ib-math-check/node_modules/playwright/index.mjs AXE_MODUL
 ```
 
 The PWA check uses a temporary normal Chromium profile (private browsing deliberately disables installation). It checks manifest parsing, installability, all 14 cached assets, touch-screen emulation, Enter submission, and input focus. The accessibility check asserts no automated WCAG A/AA violations on onboarding, dark/light home, training, summary, and dark/light settings, and checks that the answer input survives feedback and automatic advancement. Automated checks supplement manual accessibility and actual iPhone testing.
+
+Automatic-answer regression: `PLAYWRIGHT_MODULE=/tmp/ib-math-check/node_modules/playwright/index.mjs CHROMIUM_PATH=/usr/bin/chromium node tests/automatic-input.mjs`. Statistics count attempts, including incorrect retries, while reference mini-practice counts completed questions. The offline cache was advanced to `ib-math-v2`; the LocalStorage key stays unchanged so existing progress survives this update.
