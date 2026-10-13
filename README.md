@@ -15,7 +15,7 @@ This serves static files on port **8080** using Python 3. You can also run `pyth
 
 ## Practice
 
-- **Endless:** immediate questions; correct answers advance automatically. Answers are checked automatically after 850 ms without typing. Incorrect answers stay on the same question: edit the input or tap Retry until correct. Enter / Check answer remain optional manual controls. Enter during incorrect feedback retries; Enter during correct feedback moves on.
+- **Endless:** immediate questions; correct answers advance automatically. Correct answers are accepted automatically after 850 ms without typing. Partial or incorrect input never records a miss automatically; only Enter / Check answer explicitly submits a wrong attempt. Incorrect answers stay on the same question: edit the input or tap Retry until correct. Enter / Check answer remain optional manual controls. Enter during incorrect feedback retries; Enter during correct feedback moves on.
 - **Speed drill:** 1, 2, 5, or 10 minutes, with an animated countdown ring and session summary.
 - **Custom:** independently select every category and exercise subtype, including exact multiplication digit combinations.
 - **Adaptive:** starting presets move one level at a time after each block of ten answers in a category. Manual subtype selections are preserved; only applicable number distributions and tolerances change.
@@ -23,7 +23,8 @@ This serves static files on port **8080** using Python 3. You can also run `pyth
 - **Daily workout:** ten minutes with the documented interview-focused mix. Proven weaknesses increase category and subtype weights.
 - **Mixed:** mix selected categories.
 - **Playbook / reference quiz:** five completed-question practice sets, including exact-factor shortcuts and fraction families. Retries do not consume the set.
-- **Fractions below 1:** a dedicated Home / Training entry for proper fractions such as 1/4, 1/8, 1/16 and 5/8. All prompts ask for decimals below one.
+- **1/n:** dedicated practice for every reciprocal from 1/1 through 1/16, in shuffled rounds without repeats.
+- **Fractions below 1:** a dedicated Home / Training entry for proper fractions with all 120 numerator/denominator combinations up to denominator 16, in shuffled rounds. All prompts ask for decimals below one.
 - **Reference tables:** all squares n² from 1 to 100, square roots of every integer 1–100, and inverse perfect-square roots from √1 to √10,000.
 
 Pause and finish controls are always available. Backgrounding the app automatically pauses the clock. A paused session is saved and can be resumed after reopening. One practice session is active at a time; starting another offers to finish the previous one first.

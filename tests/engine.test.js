@@ -144,3 +144,36 @@ test('proper-fraction drills always ask for a positive decimal below one',()=>{
 test('complete square table contains every base from one to one hundred exactly once',()=>{
  assert.deepEqual(SQUARES,Array.from({length:100},(_,i)=>i+1));
 });
+
+test('reciprocal rounds cover denominators 1–16 once and survive serialization',()=>{
+ const decks={};let state=decks,last;
+ for(let round=0;round<4;round++){
+  const denominators=[];
+  for(let i=0;i<16;i++){
+   const p=generate('division','reciprocals',1,{decks:state});
+   assert.equal(p.a,1);assert.equal(p.answer,1/p.b);assert.equal(p.format,'decimal');
+   if(i===0&&last)assert.notEqual(p.b,last);
+   denominators.push(p.b);last=p.b;state=JSON.parse(JSON.stringify(state));
+  }
+  assert.deepEqual(denominators.sort((a,b)=>a-b),Array.from({length:16},(_,i)=>i+1));
+ }
+});
+test('proper fractions cover the expanded pool before any repeat',()=>{
+ const decks={},seen=new Set();
+ for(let i=0;i<120;i++){
+  const p=generate('division','proper',1,{decks});
+  assert.ok(!seen.has(`${p.a}/${p.b}`));seen.add(`${p.a}/${p.b}`);
+  assert.ok(p.a>0&&p.a<p.b&&p.b<=16);
+ }
+ assert.equal(seen.size,120);
+});
+test('automatic checking leaves partial and wrong input unrecorded',async()=>{
+ const {automaticAnswerReady}=await import('../js/generators.js');
+ const p={answer:300,format:'number'};
+ for(const raw of ['','3','30','301','300.','300,','300/','-'])assert.equal(automaticAnswerReady(p,raw),false,raw);
+ assert.equal(automaticAnswerReady(p,'300'),true);
+ const decimal={answer:1/16,format:'decimal',equivalentFraction:true};
+ for(const raw of ['0','0.','0.0'])assert.equal(automaticAnswerReady(decimal,raw),false,raw);
+ assert.equal(automaticAnswerReady(decimal,'0.06'),true);
+ assert.equal(automaticAnswerReady(decimal,'0,0625'),true);
+});

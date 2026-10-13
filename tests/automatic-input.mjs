@@ -9,7 +9,7 @@ await page.evaluate(()=>{const d=JSON.parse(localStorage.getItem('ib-mental-math
 await page.reload();await page.locator('[data-action="resume"]').click();
 const snap=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('ib-mental-math-v1')));
 await page.locator('#answer').fill('3');await page.waitForTimeout(350);assert.equal((await snap()).answers.length,0);
-await page.locator('#answer').fill('301');await page.locator('[data-action="retry"]').waitFor();assert.equal((await snap()).answers.length,1);assert.equal((await snap()).active.question.id,'retry-test');
+await page.locator('#answer').fill('301');await page.waitForTimeout(1200);assert.equal((await snap()).answers.length,0);await page.locator('#answer').press('Enter');await page.locator('[data-action="retry"]').waitFor();assert.equal((await snap()).answers.length,1);assert.equal((await snap()).active.question.id,'retry-test');
 await page.waitForTimeout(1300);assert.equal((await snap()).active.question.id,'retry-test');assert.equal(await page.locator('#answer').getAttribute('aria-readonly'),'false');
 await page.locator('#answer').fill('300');await page.waitForFunction(()=>document.querySelector('#feedback').textContent.includes('Correct'));
 assert.equal((await snap()).answers.length,2);assert.equal((await snap()).mistakes[0].resolved,true);

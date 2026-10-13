@@ -16,3 +16,28 @@ svg{width:18px;height:18px;flex-shrink:0}.tag svg,.eyebrow svg{width:12px;height
 @media(max-width:900px){.hero-art{display:none}}
 .keyboard-open.training-active .question-card{min-height:0;padding:16px}.keyboard-open .question-prompt{margin:18px 0;font-size:36px}.keyboard-open .question-prompt.wordy{font-size:22px}.keyboard-open .training-top{margin-bottom:12px}.keyboard-open .session-stats{padding:9px 0}.keyboard-open .session-note{display:none}
 @media(max-height:600px) and (max-width:600px){.training-active .question-card{min-height:0;padding:16px}.training-active .question-prompt{margin:18px 0}.training-active .session-note{display:none}}
+
+/* Touch-first grouped controls and a compact iPhone-style setup sheet. */
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.mode-picker{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mode-option{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:50px;padding:12px 14px;border:1px solid var(--border);border-radius:14px;background:var(--card);color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.mode-option.selected{border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
+.mode-option:active,.btn:active,.practice-card:active{transform:scale(.98)}
+.mode-option:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.reciprocal-panel .section-head{flex-wrap:wrap;gap:16px}
+.type-group .chip:has(input:checked){border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+@media(max-width:600px){
+ #modal{border-radius:28px 28px 0 0;padding:22px 20px max(22px,env(safe-area-inset-bottom));max-height:92dvh;margin:auto 0 0;width:100%;max-width:none}
+ #modal::before{content:"";display:block;width:36px;height:5px;background:var(--muted);opacity:.4;border-radius:8px;margin:-10px auto 20px}
+ .modal-header h2{font-size:24px;letter-spacing:-.6px}
+ .modal-footer{position:sticky;bottom:0;background:var(--card);padding:16px 0 4px;margin-bottom:0}
+ .modal-footer .primary{flex:1;min-height:50px;border-radius:15px}
+ .mode-option{font-size:13px;min-height:54px}
+ .type-group{border-radius:16px;overflow:hidden}
+ .type-group summary{min-height:50px;display:flex;align-items:center}
+ .type-group .chips{gap:8px;padding:12px}
+ .mobile-nav{border-radius:22px 22px 0 0;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+ .answer-input{font-size:28px;min-height:64px;border-radius:18px}
+ .question-card{border-radius:24px}
+ .practice-card{border-radius:20px}
+}

@@ -1,4 +1,4 @@
-const CACHE = 'ib-math-v2';
+const CACHE = 'ib-math-v3';
 const ROOT = new URL('./', self.location.href);
 const ASSETS = ['./','index.html','css/styles.css','js/app.js','js/generators.js','js/tricks.js','js/stats.js','js/storage.js','js/ui.js','manifest.json','icons/icon-192.png','icons/icon-512.png','icons/maskable-512.png','icons/apple-touch-icon.png'].map(path=>new URL(path,ROOT).href);
 self.addEventListener('install',event=>{
